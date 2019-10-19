@@ -52,8 +52,8 @@ RUN set -x; \
 
 # Install Odoo
 ENV ODOO_VERSION 13.0
-ARG ODOO_RELEASE=20191009
-ARG ODOO_SHA=468633ffd7ebacdde116e8708fd62f74788cd2b1
+ARG ODOO_RELEASE=20191018
+ARG ODOO_SHA=8a0b283a7ae9a9c8e8738db1e5477db23e8ff9c3
 RUN set -x; \
         curl -o odoo.deb -sSL http://nightly.odoo.com/${ODOO_VERSION}/nightly/deb/odoo_${ODOO_VERSION}.${ODOO_RELEASE}_all.deb \
         && echo "${ODOO_SHA} odoo.deb" | sha1sum -c - \
@@ -63,6 +63,7 @@ RUN set -x; \
         && rm -rf /var/lib/apt/lists/* odoo.deb
 
 # Copy entrypoint script and Odoo configuration file
+RUN pip3 install num2words xlwt unicodecsv unidecode pysftp==0.2.8 polib==1.1.0
 COPY ./entrypoint.sh /
 COPY ./odoo.conf /etc/odoo/
 RUN chown odoo /etc/odoo/odoo.conf
